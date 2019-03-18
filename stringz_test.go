@@ -52,7 +52,7 @@ func TestDedup(t *testing.T) {
 	for _, tt := range table {
 		t.Run(tt.description, func(t *testing.T) {
 			actual := Dedup(tt.xs)
-			if !Equal(actual, tt.expected) {
+			if !SliceEqual(actual, tt.expected) {
 				t.Errorf("actual = %v; want = %v", actual, tt.expected)
 			}
 		})
@@ -81,7 +81,7 @@ func TestDefault(t *testing.T) {
 	}
 }
 
-func TestEqual(t *testing.T) {
+func TestSliceEqual(t *testing.T) {
 	table := []struct {
 		description string
 		xs          []string
@@ -95,7 +95,7 @@ func TestEqual(t *testing.T) {
 
 	for _, tt := range table {
 		t.Run(tt.description, func(t *testing.T) {
-			actual := Equal(tt.xs, tt.ys)
+			actual := SliceEqual(tt.xs, tt.ys)
 			if actual != tt.expected {
 				t.Errorf("actual = %v; want = %v", actual, tt.expected)
 			}

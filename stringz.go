@@ -63,8 +63,8 @@ func Default(val, fallback string, zeroValues ...string) string {
 	return val
 }
 
-// Equal returns true if two string slices are the same.
-func Equal(xs, ys []string) bool {
+// SliceEqual returns true if two string slices are the same.
+func SliceEqual(xs, ys []string) bool {
 	if len(xs) != len(ys) {
 		return false
 	}
