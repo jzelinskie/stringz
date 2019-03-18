@@ -44,6 +44,13 @@ func Dedup(xs []string) []string {
 	return ys
 }
 
+// EmptyDefault returns the fallback when val is empty string.
+//
+// This function is inspired by Python's `dict.get()`.
+func EmptyDefault(val, fallback string) string {
+	return Default(val, fallback, "")
+}
+
 // Default returns a fallback value when the provided value is equal to any
 // of the provided zero values.
 func Default(val, fallback string, zeroValues ...string) string {
