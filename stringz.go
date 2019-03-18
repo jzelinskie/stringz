@@ -31,14 +31,14 @@ func Contains(ys []string, x string) bool {
 
 // Dedup returns a new slice with any duplicates removed.
 func Dedup(xs []string) []string {
-	xsSet := make(map[string]struct{}, 0)
+	set := make(map[string]struct{}, 0)
+	ys := make([]string, 0, len(xs))
 	for _, x := range xs {
-		xsSet[x] = struct{}{}
-	}
-
-	ys := make([]string, 0, len(xsSet))
-	for x := range xsSet {
+		if _, alreadyExists := set[x]; alreadyExists {
+			continue
+		}
 		ys = append(ys, x)
+		set[x] = struct{}{}
 	}
 
 	return ys
