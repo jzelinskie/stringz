@@ -52,7 +52,7 @@ func EmptyDefault(val, fallback string) string {
 }
 
 // Default returns a fallback value when the provided value is equal to any
-// of the provided zero values.
+// of the zero values.
 func Default(val, fallback string, zeroValues ...string) string {
 	for _, zeroValue := range zeroValues {
 		if val == zeroValue {
