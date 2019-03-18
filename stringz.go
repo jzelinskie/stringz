@@ -56,6 +56,21 @@ func Default(val, fallback string, zeroValues ...string) string {
 	return val
 }
 
+// Equal returns true if two string slices are the same.
+func Equal(xs, ys []string) bool {
+	if len(xs) != len(ys) {
+		return false
+	}
+
+	for i, x := range xs {
+		if x != ys[i] {
+			return false
+		}
+	}
+
+	return true
+}
+
 // TrimSurrounding returns a string with both a prefix and suffix trimmed from
 // it.
 func TrimSurrounding(s, surrounding string) string {
