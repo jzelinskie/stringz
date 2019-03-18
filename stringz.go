@@ -18,9 +18,9 @@ package stringz
 
 import "strings"
 
-// Contains returns true if the provided string is in the provided string
+// SliceContains returns true if the provided string is in the provided string
 // slice.
-func Contains(ys []string, x string) bool {
+func SliceContains(ys []string, x string) bool {
 	for _, y := range ys {
 		if x == y {
 			return true

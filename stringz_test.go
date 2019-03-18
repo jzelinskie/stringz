@@ -16,7 +16,7 @@ package stringz
 
 import "testing"
 
-func TestContains(t *testing.T) {
+func TestSliceContains(t *testing.T) {
 	table := []struct {
 		description string
 		ys          []string
@@ -30,7 +30,7 @@ func TestContains(t *testing.T) {
 
 	for _, tt := range table {
 		t.Run(tt.description, func(t *testing.T) {
-			actual := Contains(tt.ys, tt.x)
+			actual := SliceContains(tt.ys, tt.x)
 			if actual != tt.expected {
 				t.Errorf("actual = %v; want = %v", actual, tt.expected)
 			}
