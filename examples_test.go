@@ -17,14 +17,14 @@ func ExampleTrimSurrounding() {
 	// quoted text
 }
 
-func ExampleEmptyDefault() {
+func ExampleDefaultEmpty() {
 	myFunc := func() string {
 		// Oh no! I failed!
 		// Return the empty string!
 		return ""
 	}
 
-	myFuncOutput := stringz.EmptyDefault(myFunc(), "sane default")
+	myFuncOutput := stringz.DefaultEmpty(myFunc(), "sane default")
 
 	fmt.Println(myFuncOutput)
 
