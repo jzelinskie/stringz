@@ -84,3 +84,17 @@ func TrimSurrounding(s, surrounding string) string {
 	s = strings.TrimPrefix(s, surrounding)
 	return strings.TrimSuffix(s, surrounding)
 }
+
+// SliceMap is a functional-style mapping function for slices of strings.
+//
+// This is particularly useful when you would normally use a for-loop, but want
+// `defer` to execute for each iteration.
+func SliceMap(xs []string, fn func(string) error) error {
+	for _, x := range xs {
+		err := fn(x)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}

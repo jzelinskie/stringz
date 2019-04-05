@@ -2,6 +2,9 @@ package stringz_test
 
 import (
 	"fmt"
+	"io"
+	"io/ioutil"
+	"os"
 
 	"github.com/jzelinskie/stringz"
 )
@@ -27,4 +30,21 @@ func ExampleEmptyDefault() {
 
 	// Output:
 	// sane default
+}
+
+func ExampleSliceMap() {
+	files := []string{"/home/my/file", "/home/your/file"}
+
+	if err := stringz.SliceMap(files, func(path string) error {
+		f, err := os.Open(path)
+		if err != nil {
+			return err
+		}
+		defer f.Close() // Defer runs for every iteration!
+
+		_, err = io.Copy(ioutil.Discard, f)
+		return err
+	}); err != nil {
+		fmt.Println(err)
+	}
 }
