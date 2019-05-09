@@ -98,3 +98,6 @@ func SliceMap(xs []string, fn func(string) error) error {
 	}
 	return nil
 }
+
+// Join is strings.Join, but variadic.
+func Join(prefix string, xs ...string) string { return strings.Join(xs, prefix) }
