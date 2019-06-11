@@ -123,3 +123,35 @@ func TestTrimSurrounding(t *testing.T) {
 		})
 	}
 }
+
+func TestCopyStringMap(t *testing.T) {
+	table := []struct {
+		description string
+		xs          map[string]string
+		expected    map[string]string
+	}{
+		{"nil maps", nil, nil},
+		{"empty maps", map[string]string{}, map[string]string{}},
+		{"kv maps", map[string]string{"k": "v"}, map[string]string{"k": "v"}},
+	}
+
+	for _, tt := range table {
+		t.Run(tt.description, func(t *testing.T) {
+			actual := CopyStringMap(tt.xs)
+			switch {
+			case actual == nil && tt.expected == nil:
+				return
+			case actual == nil && tt.expected != nil:
+				t.Errorf("actual = %v; want = %v", actual, tt.expected)
+			case actual != nil && tt.expected == nil:
+				t.Errorf("actual = %v; want = %v", actual, tt.expected)
+			default:
+				for k := range tt.xs {
+					if actual[k] != tt.expected[k] {
+						t.Errorf("actual = %v; want = %v", actual, tt.expected)
+					}
+				}
+			}
+		})
+	}
+}

@@ -101,3 +101,17 @@ func SliceMap(xs []string, fn func(string) error) error {
 
 // Join is strings.Join, but variadic.
 func Join(prefix string, xs ...string) string { return strings.Join(xs, prefix) }
+
+// CopyStringMap returns a new copy of a map of strings.
+func CopyStringMap(xs map[string]string) map[string]string {
+	// Zero allocation path.
+	if xs == nil {
+		return nil
+	}
+
+	ys := make(map[string]string, len(xs))
+	for k, v := range xs {
+		ys[k] = v
+	}
+	return ys
+}
