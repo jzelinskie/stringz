@@ -115,3 +115,10 @@ func CopyStringMap(xs map[string]string) map[string]string {
 	}
 	return ys
 }
+
+// Unpack assigns a slice into local variables.
+func Unpack(xs []string, vars ...*string) {
+	for i, x := range xs {
+		*vars[i] = x
+	}
+}

@@ -48,3 +48,12 @@ func ExampleSliceMap() {
 		fmt.Println(err)
 	}
 }
+
+func ExampleUnpack() {
+	var first, second string
+	stringz.Unpack([]string{"hello", "world"}, &first, &second)
+	fmt.Println(first, second)
+
+	// Output:
+	// hello world
+}
