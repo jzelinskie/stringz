@@ -78,8 +78,20 @@ func SliceEqual(xs, ys []string) bool {
 	return true
 }
 
+// TrimPrefixIndex trims everything before the provided index.
+func TrimPrefixIndex(s, index string) string {
+	i := strings.Index(s, index)
+	if i <= 0 {
+		return s
+	}
+	return s[i+len(index):]
+}
+
 // TrimSurrounding returns a string with both a prefix and suffix trimmed from
 // it.
+//
+// Do not confuse this with strings.Trim() which removes characters in a cutset
+// rather than working on prefixes and suffixes.
 func TrimSurrounding(s, surrounding string) string {
 	s = strings.TrimPrefix(s, surrounding)
 	return strings.TrimSuffix(s, surrounding)

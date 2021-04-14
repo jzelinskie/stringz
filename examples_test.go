@@ -57,3 +57,12 @@ func ExampleUnpack() {
 	// Output:
 	// hello world
 }
+
+func ExampleTrimPrefixIndex() {
+	fmt.Println(stringz.TrimPrefixIndex("this:that", ":"))
+	fmt.Println(stringz.TrimPrefixIndex("this::that", "::"))
+
+	// Output:
+	// that
+	// that
+}

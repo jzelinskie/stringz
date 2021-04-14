@@ -103,6 +103,29 @@ func TestSliceEqual(t *testing.T) {
 	}
 }
 
+func TestTrimPrefixIndex(t *testing.T) {
+	table := []struct {
+		description string
+		input       string
+		index       string
+		expected    string
+	}{
+		{"no index match returns original", "test/this", "@", "test/this"},
+		{"empty string index", "test/this", "", "test/this"},
+		{"multichar index", "test/this/that", "/this/", "that"},
+		{"simple", "test/this", "/", "this"},
+	}
+
+	for _, tt := range table {
+		t.Run(tt.description, func(t *testing.T) {
+			actual := TrimPrefixIndex(tt.input, tt.index)
+			if actual != tt.expected {
+				t.Errorf("actual = %v; want = %v", actual, tt.expected)
+			}
+		})
+	}
+}
+
 func TestTrimSurrounding(t *testing.T) {
 	table := []struct {
 		description string
