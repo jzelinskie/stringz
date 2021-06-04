@@ -16,7 +16,14 @@
 // manipulating strings and lists of strings.
 package stringz
 
-import "strings"
+import (
+	"errors"
+	"strings"
+)
+
+// ErrInconsistentUnpackLen is returned when Unpack is provided two slices
+// without the same length.
+var ErrInconsistentUnpackLen = errors.New("the length of the unpacked is not equal to the provided input")
 
 // SliceContains returns true if the provided string is in the provided string
 // slice.
@@ -129,8 +136,19 @@ func CopyStringMap(xs map[string]string) map[string]string {
 }
 
 // Unpack assigns a slice into local variables.
-func Unpack(xs []string, vars ...*string) {
+func Unpack(xs []string, vars ...*string) error {
+	if len(xs) != len(vars) {
+		return ErrInconsistentUnpackLen
+	}
 	for i, x := range xs {
 		*vars[i] = x
 	}
+	return nil
+}
+
+// SplitExact splits the string `s` into `len(vars)` number of strings and
+// unpacks them into those vars.
+func SplitExact(s, sep string, vars ...*string) error {
+	exploded := strings.Split(s, sep)
+	return Unpack(exploded, vars...)
 }
