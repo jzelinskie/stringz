@@ -14,7 +14,9 @@
 
 package stringz
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestSliceContains(t *testing.T) {
 	table := []struct {
@@ -103,6 +105,30 @@ func TestSliceEqual(t *testing.T) {
 	}
 }
 
+func TestMatrixEqual(t *testing.T) {
+	table := []struct {
+		description string
+		xs          [][]string
+		ys          [][]string
+		expected    bool
+	}{
+		{"nil slices are equal", nil, nil, true},
+		{"empty slices are equal", [][]string{}, [][]string{}, true},
+		{"single items are equal", [][]string{{"x"}}, [][]string{{"x"}}, true},
+		{"duplicates aren't equal", [][]string{{"x"}, {"x"}}, [][]string{{"x"}}, false},
+		{"differing orders aren't equal", [][]string{{"x"}, {"y"}}, [][]string{{"y"}, {"x"}}, false},
+	}
+
+	for _, tt := range table {
+		t.Run(tt.description, func(t *testing.T) {
+			actual := MatrixEqual(tt.xs, tt.ys)
+			if actual != tt.expected {
+				t.Errorf("actual = %v; want = %v", actual, tt.expected)
+			}
+		})
+	}
+}
+
 func TestTrimPrefixIndex(t *testing.T) {
 	table := []struct {
 		description string
@@ -174,6 +200,108 @@ func TestCopyStringMap(t *testing.T) {
 						t.Errorf("actual = %v; want = %v", actual, tt.expected)
 					}
 				}
+			}
+		})
+	}
+}
+
+func TestSlicePermutationsR(t *testing.T) {
+	table := []struct {
+		description string
+		xs          []string
+		r           int
+		expected    [][]string
+	}{
+		{"r is negative", []string{"a", "b"}, -1, nil},
+		{"r > len(xs)", []string{"a", "b"}, 10, nil},
+		{"nil slice", nil, 0, nil},
+		{"empty slice", []string{}, 0, nil},
+		{"two items r = 0", []string{"a", "b"}, 0, nil},
+		{"two items r = 1", []string{"a", "b"}, 1, [][]string{{"a"}, {"b"}}},
+		{"two items r = 2", []string{"a", "b"}, 2, [][]string{{"a", "b"}, {"b", "a"}}},
+		{"duplicates", []string{"a", "a"}, 2, [][]string{{"a", "a"}, {"a", "a"}}},
+		{"common case", []string{"a", "b", "c"}, 3, [][]string{
+			{"a", "b", "c"},
+			{"a", "c", "b"},
+			{"b", "a", "c"},
+			{"b", "c", "a"},
+			{"c", "a", "b"},
+			{"c", "b", "a"},
+		}},
+	}
+
+	for _, tt := range table {
+		t.Run(tt.description, func(t *testing.T) {
+			actual := SlicePermutationsR(tt.xs, tt.r)
+			if !MatrixEqual(actual, tt.expected) {
+				t.Errorf("actual = %v; want = %v", actual, tt.expected)
+			}
+		})
+	}
+}
+
+func TestSliceCombinationsR(t *testing.T) {
+	table := []struct {
+		description string
+		xs          []string
+		r           int
+		expected    [][]string
+	}{
+		{"r is negative", []string{"a", "b"}, -1, nil},
+		{"r > len(xs)", []string{"a", "b"}, 10, nil},
+		{"nil slice", nil, 0, nil},
+		{"empty slice", []string{}, 0, nil},
+		{"two items r = 0", []string{"a", "b"}, 0, nil},
+		{"two items r = 1", []string{"a", "b"}, 1, [][]string{{"a"}, {"b"}}},
+		{"two items r = 2", []string{"a", "b"}, 2, [][]string{{"a", "b"}}},
+		{"duplicates", []string{"a", "a"}, 2, [][]string{{"a", "a"}}},
+		{"common case", []string{"a", "b", "c"}, 3, [][]string{{"a", "b", "c"}}},
+	}
+
+	for _, tt := range table {
+		t.Run(tt.description, func(t *testing.T) {
+			actual := SliceCombinationsR(tt.xs, tt.r)
+			if !MatrixEqual(actual, tt.expected) {
+				t.Errorf("actual = %v; want = %v", actual, tt.expected)
+			}
+		})
+	}
+}
+
+func TestSliceCombinationsWithReplacement(t *testing.T) {
+	table := []struct {
+		description string
+		xs          []string
+		r           int
+		expected    [][]string
+	}{
+		{"r is negative", []string{"a", "b"}, -1, nil},
+		{"r > len(xs)", []string{"a", "b"}, 10, nil},
+		{"nil slice", nil, 0, nil},
+		{"empty slice", []string{}, 0, nil},
+		{"two items r = 0", []string{"a", "b"}, 0, nil},
+		{"two items r = 1", []string{"a", "b"}, 1, [][]string{{"a"}, {"b"}}},
+		{"two items r = 2", []string{"a", "b"}, 2, [][]string{{"a", "a"}, {"a", "b"}, {"b", "b"}}},
+		{"duplicates", []string{"a", "a"}, 2, [][]string{{"a", "a"}, {"a", "a"}, {"a", "a"}}},
+		{"common case", []string{"a", "b", "c"}, 3, [][]string{
+			{"a", "a", "a"},
+			{"a", "a", "b"},
+			{"a", "a", "c"},
+			{"a", "b", "b"},
+			{"a", "b", "c"},
+			{"a", "c", "c"},
+			{"b", "b", "b"},
+			{"b", "b", "c"},
+			{"b", "c", "c"},
+			{"c", "c", "c"},
+		}},
+	}
+
+	for _, tt := range table {
+		t.Run(tt.description, func(t *testing.T) {
+			actual := SliceCombinationsWithReplacement(tt.xs, tt.r)
+			if !MatrixEqual(actual, tt.expected) {
+				t.Errorf("actual = %v; want = %v", actual, tt.expected)
 			}
 		})
 	}
