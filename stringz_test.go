@@ -306,3 +306,75 @@ func TestSliceCombinationsWithReplacement(t *testing.T) {
 		})
 	}
 }
+
+func TestSplitExact(t *testing.T) {
+	testCases := []struct {
+		src         string
+		expectedErr error
+		parts       []string
+	}{
+		{"", nil, []string{""}},
+		{"one/two", nil, []string{"one", "two"}},
+		{"one/two/three/four/five", nil, []string{"one", "two", "three", "four", "five"}},
+		{"one/two", ErrInconsistentUnpackLen, []string{}},
+		{"one", ErrInconsistentUnpackLen, []string{"one", "two"}},
+	}
+	for _, tc := range testCases {
+		t.Run(tc.src, func(t *testing.T) {
+			dests := make([]string, len(tc.parts))
+			destVars := make([]*string, len(tc.parts))
+
+			for i := range dests {
+				destVars[i] = &dests[i]
+			}
+
+			err := SplitExact(tc.src, "/", destVars...)
+			if err != tc.expectedErr {
+				t.Fatalf("actual = %s, want = %s", err, tc.expectedErr)
+			}
+			if err == nil {
+				for i := range tc.parts {
+					if tc.parts[i] != dests[i] {
+						t.Fatalf("actual[%d] = %s, expected[%d] = %s", i, dests[i], i, tc.parts[i])
+					}
+				}
+			}
+		})
+	}
+}
+
+func TestSplitInto(t *testing.T) {
+	testCases := []struct {
+		src         string
+		expectedErr error
+		parts       []string
+	}{
+		{"", nil, []string{""}},
+		{"one/two", nil, []string{"one", "two"}},
+		{"one/two/three/four/five", nil, []string{"one", "two/three/four/five"}},
+		{"one/two", nil, []string{"one/two"}},
+		{"one", ErrInconsistentUnpackLen, []string{"one", "two"}},
+	}
+	for _, tc := range testCases {
+		t.Run(tc.src, func(t *testing.T) {
+			dests := make([]string, len(tc.parts))
+			destVars := make([]*string, len(tc.parts))
+
+			for i := range dests {
+				destVars[i] = &dests[i]
+			}
+
+			err := SplitInto(tc.src, "/", destVars...)
+			if err != tc.expectedErr {
+				t.Fatalf("actual = %s, want = %s", err, tc.expectedErr)
+			}
+			if err == nil {
+				for i := range tc.parts {
+					if tc.parts[i] != dests[i] {
+						t.Fatalf("actual[%d] = %s, expected[%d] = %s", i, dests[i], i, tc.parts[i])
+					}
+				}
+			}
+		})
+	}
+}

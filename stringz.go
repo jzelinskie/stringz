@@ -176,8 +176,22 @@ func Unpack(xs []string, vars ...*string) error {
 
 // SplitExact splits the string `s` into `len(vars)` number of strings and
 // unpacks them into those vars.
+//
+// Returns ErrInconsistentUnpackLen if len(vars) doesn't match the number of
+// split segments.
 func SplitExact(s, sep string, vars ...*string) error {
 	exploded := strings.Split(s, sep)
+	return Unpack(exploded, vars...)
+}
+
+// SplitInto splits the string `s` into `len(vars)` number of strings and
+// unpacks them into those vars. If there are more substrings that would be
+// split after len(vars), they will be all be put into the final variable.
+//
+// Returns ErrInconsistentUnpackLen if len(vars) is greater than the number
+// of split substrings.
+func SplitInto(s, sep string, vars ...*string) error {
+	exploded := strings.SplitN(s, sep, len(vars))
 	return Unpack(exploded, vars...)
 }
 
@@ -294,7 +308,7 @@ func SliceCombinationsR(pool []string, r int) [][]string {
 	}
 
 	for {
-		i := -1
+		var i int
 		broke := false
 		for i = r - 1; i >= 0; i-- {
 			if indices[i] != i+n-r {
@@ -353,7 +367,7 @@ func SliceCombinationsWithReplacement(pool []string, r int) [][]string {
 	}
 
 	for {
-		i := -1
+		var i int
 		broke := false
 		for i = r - 1; i >= 0; i-- {
 			if indices[i] != n-1 {
