@@ -23,15 +23,7 @@ jobs:
           echo "${GO_MOD_OUPUT}"
           exit 1
         fi
-    - name: "Format"
-      run: |
-        go install mvdan.cc/gofumpt/gofumports@latest
-        GOFUMPT_OUTPUT="$(gofumports -d .)"
-        if [ -n "$GOFUMPT_OUTPUT" ]; then
-          echo "All the following files are not correctly formatted"
-          echo "${GOFUMPT_OUTPUT}"
-          exit 1
-        fi
+    - uses: "authzed/actions/gofumpt@main"
     - name: "Lint"
       run: |
         go install github.com/mgechev/revive@latest
