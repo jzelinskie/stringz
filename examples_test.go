@@ -51,7 +51,9 @@ func ExampleSliceMap() {
 
 func ExampleUnpack() {
 	var first, second string
-	stringz.Unpack([]string{"hello", "world"}, &first, &second)
+	if err := stringz.Unpack([]string{"hello", "world"}, &first, &second); err != nil {
+		panic(err)
+	}
 	fmt.Println(first, second)
 
 	// Output:

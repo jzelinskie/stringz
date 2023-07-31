@@ -294,7 +294,7 @@ func SliceCombinationsR(pool []string, r int) [][]string {
 	}
 
 	for {
-		i := -1
+		var i int
 		broke := false
 		for i = r - 1; i >= 0; i-- {
 			if indices[i] != i+n-r {
@@ -353,7 +353,7 @@ func SliceCombinationsWithReplacement(pool []string, r int) [][]string {
 	}
 
 	for {
-		i := -1
+		var i int
 		broke := false
 		for i = r - 1; i >= 0; i-- {
 			if indices[i] != n-1 {
